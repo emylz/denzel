@@ -40,6 +40,16 @@ app.get("/movies/populate", async (request, response) => {
   });
 });
 
+app.get("/movies", (request, response) => {
+  collection.find({"metascore":{$gte:70}}).toArray((error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        let random = Math.floor(Math.random() * Math.floor(result.length));
+        response.send(result[random]);
+    });
+});
+
 app.get("/movies/:id", (request, response) => {
   collection.findOne({ "id": request.params.id }, (error, result) => {
         if(error) {
