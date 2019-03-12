@@ -9,8 +9,6 @@ const DATABASE_NAME = "example";
 const imdb = require("./src/imdb");
 const DENZEL_IMDB_ID = "nm0000243";
 
-
-
 var app = Express();
 
 app.use(BodyParser.json());
@@ -30,14 +28,34 @@ app.listen(9292, () => {
     });
 });
 
+app.post("/movies/delete", async (request, response) => {
+  collection.deleteMany({}, function(err, obj) {
+    if (err) return response.status(500).send(err);
+    response.send("Clear !");
+  });
+});
+
+async function count_(){
+  let c = 0;
+  await collection.countDocuments().then((count) => {
+  c = count;
+  });
+return c;
+}
+
 app.get("/movies/populate", async (request, response) => {
+  var count = await count_();
+  if(count >= 56){ console.log("Database already populate!");
+        response.send("Database already populate!");
+      }else{
   const denzel = await imdb(DENZEL_IMDB_ID);
   collection.insertMany(denzel, (err, result) => {
     if (err) {
       return response.status(500).send(err);
     }
-    response.send(`${denzel.length}`);
+    response.send("Populate complete! => " + denzel.length + " films!");
   });
+  }
 });
 
 app.get("/movies", (request, response) => {
@@ -50,8 +68,35 @@ app.get("/movies", (request, response) => {
     });
 });
 
+app.get("/movies/search", (request, response) => {
+  let metascore=0;
+  if(request.query["metascore"]!=null) metascore=Number(request.query.metascore);
+  let limit=5;
+  if(request.query["limit"]!=null && Number(request.query.limit)<=5) limit=Number(request.query.limit);
+  collection.find({"metascore": {$gte: metascore}}).sort({"metascore":-1}).toArray((error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        var res = [];
+        for(let i = 0; i < limit; i++)
+        {
+          if(result[i]!=null) res.push(result[i]);
+        }
+        response.send(res);
+    });
+});
+
 app.get("/movies/:id", (request, response) => {
   collection.findOne({ "id": request.params.id }, (error, result) => {
+        if(error) {
+            return response.status(500).send(error);
+        }
+        response.send(result);
+    });
+});
+
+app.post("/movies/:id", (request, response) => {
+  collection.updateOne({"id":request.params.id},{ $set:request.body },(error, result) => {
         if(error) {
             return response.status(500).send(error);
         }
