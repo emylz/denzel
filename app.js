@@ -3,7 +3,7 @@ const BodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
 
-const CONNECTION_URL = ""; //Connection id
+const CONNECTION_URL = "mongodb+srv://**:**@denzel-nmus5.mongodb.net/test?retryWrites=true";
 const DATABASE_NAME = "example";
 
 const imdb = require("./src/imdb");
