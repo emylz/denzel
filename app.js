@@ -70,7 +70,10 @@ app.get("/movies", (request, response) => {
 
 app.get("/movies/search", (request, response) => {
   let metascore=0;
-  if(request.query["metascore"]!=null) metascore=Number(request.query.metascore);
+  if(request.query["metascore"]!=null) {
+    metascore=Number(request.query.metascore);
+    if(metascore>100) metascore=100;
+  }
   let limit=5;
   if(request.query["limit"]!=null && Number(request.query.limit)<=5) limit=Number(request.query.limit);
   collection.find({"metascore": {$gte: metascore}}).sort({"metascore":-1}).toArray((error, result) => {
