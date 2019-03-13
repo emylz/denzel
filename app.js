@@ -7,7 +7,7 @@ const CONNECTION_URL = "mongodb+srv://**:**@denzel-nmus5.mongodb.net/test?retryW
 const DATABASE_NAME = "example";
 
 const imdb = require("./src/imdb");
-const DENZEL_IMDB_ID = "nm0000243";
+const ID_BDD = "nm0000243";
 
 var app = Express();
 
@@ -48,7 +48,7 @@ app.get("/movies/populate", async (request, response) => {
   if(count >= 56){ console.log("Database already populate!");
         response.send("Database already populate!");
       }else{
-  const denzel = await imdb(DENZEL_IMDB_ID);
+  const denzel = await imdb(ID_BDD);
   collection.insertMany(denzel, (err, result) => {
     if (err) {
       return response.status(500).send(err);
