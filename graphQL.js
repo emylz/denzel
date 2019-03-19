@@ -6,7 +6,7 @@ const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
 const _ = require('lodash');
 
-const CONNECTION_URL = "mongodb+srv://example:SCRAM@denzel-nmus5.mongodb.net/test?retryWrites=true";
+const CONNECTION_URL = "mongodb+srv://**:**@denzel-nmus5.mongodb.net/test?retryWrites=true";
 const DATABASE_NAME = "example";
 
 const imdb = require("./src/imdb");
