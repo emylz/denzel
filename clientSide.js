@@ -48,20 +48,20 @@ function html(result){
       result.review='There is no review.';
   }
     return `<html>
-            <head> Denzel Washington's movie </head>
+            <head> <font size="6"><b> Denzel Washington's random must-watch movie </b></font></head>
             <br/>
             <body align="center"> <br/>
-            <p>Title: ` + result.title + `  </p>
+            <p> <b> Title:</b> ` + result.title + `  </p>
             <br/>
-            Synopsis:  ` + result.synopsis + ` </p>
+            <p> <b>Synopsis:</b> ` + result.synopsis + ` </p>
             <br/>
              <img src=` + result.poster + `> </img>
             <br/>
-            <p> Metascore:  ` + result.metascore + ` </p>
+            <p> <b>Metascore:</b>  ` + result.metascore + ` </p>
             <br/>
-            <p> Review:  ` + result.review + ` </p>
+            <p> <b>Review:</b>  ` + result.review + ` </p>
             <br/>
-            <p> IMDb:  <a href=` + result.link +` target="_blank">`+result.title+`</a> </p>
+            <p> <b>IMDb: </b> <a href=` + result.link +` target="_blank">`+result.title+`</a> </p>
             <br/>
             <button id="refresh" onclick="location.reload();"> Refresh </button>
             <br/>
