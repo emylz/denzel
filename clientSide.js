@@ -16,7 +16,7 @@ app.use(BodyParser.urlencoded({ extended: true }));
 
 var database, collection;
 
-app.listen(9292, () => {
+app.listen(3000, () => {
   MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
         if(error) {
             throw error;
@@ -43,6 +43,33 @@ async function count_(){
 return c;
 }
 
+function html(result){
+  if(typeof(result.review)=='undefined'){
+      result.review='There is no review.';
+  }
+    return `<html>
+            <head> Denzel Washington's movie </head>
+            <br/>
+            <body align="center"> <br/>
+            <p>Title: ` + result.title + `  </p>
+            <br/>
+            Synopsis:  ` + result.synopsis + ` </p>
+            <br/>
+             <img src=` + result.poster + `> </img>
+            <br/>
+            <p> Metascore:  ` + result.metascore + ` </p>
+            <br/>
+            <p> Review:  ` + result.review + ` </p>
+            <br/>
+            <p> IMDb:  <a href=` + result.link +` target="_blank">`+result.title+`</a> </p>
+            <br/>
+            <button id="refresh" onclick="location.reload();"> Refresh </button>
+            <br/>
+            </body>
+            </html> `
+
+}
+
 app.get("/movies/populate", async (request, response) => {
   var count = await count_();
   if(count >= 56){ console.log("Database already populate!");
@@ -58,13 +85,13 @@ app.get("/movies/populate", async (request, response) => {
   }
 });
 
-app.get("/movies", (request, response) => {
+app.get("/", (request, response) => {
   collection.find({"metascore":{$gte:70}}).toArray((error, result) => {
         if(error) {
             return response.status(500).send(error);
         }
         let random = Math.floor(Math.random() * Math.floor(result.length));
-        response.send(result[random]);
+        response.send(html(result[random]));
     });
 });
 
